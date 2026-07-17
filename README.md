@@ -33,7 +33,7 @@ ls -l /root/bak/
 
 ![Step 2](images/step2.png)
 
-## Step 3. 클러스터에서 target 드라이브 제거 (deactivate → remove)  [C]
+## Step 3. 클러스터에서 target 드라이브 제거 (deactivate → remove)  [T]
 target의 각 드라이브 UUID에 대해 `deactivate` 후 `remove`. (`yes/no` 프롬프트 — 자동화 시 `--force`)
 ```bash
 weka cluster drive | grep backend07                         # 대상 UUID 확인
