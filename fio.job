@@ -1,0 +1,48 @@
+[global]
+filesize=1G
+time_based=1
+startdelay=5
+ramp_time=3
+fallocate=none
+exitall_on_error=1
+create_serialize=0
+filename_format=$jobnum
+directory=/mnt/weka/fio
+group_reporting=1
+clocksource=gettimeofday
+runtime=60
+ioengine=posixaio
+disk_util=1
+direct=1
+numjobs=96
+invalidate=1
+
+[seq-r]
+stonewall
+description='Sequential Read bandwidth workload'
+blocksize=1Mi
+rw=read
+iodepth=1
+
+[seq-w]
+stonewall
+description='Sequential Write bandwidth workload'
+blocksize=1Mi
+rw=write
+iodepth=1
+
+[rnd-r]
+stonewall
+description='random Read bandwidth workload'
+blocksize=4k
+rw=randread
+numjobs=256
+iodepth=16
+
+[rnd-w]
+stonewall
+description='random write bandwidth workload'
+blocksize=4k
+rw=randwrite
+numjobs=256
+iodepth=16
