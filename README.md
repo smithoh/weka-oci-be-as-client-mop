@@ -25,7 +25,7 @@ weka cluster drive | grep backend07     # target 드라이브의 DISK ID / UUID 
 ```bash
 mkdir -p /root/bak
 weka local resources -C drives0   -J > /root/bak/drives0.json
-weka local resources -C compute0  -J > /root/bak/compute0.json
+weka local resources -C compute0  -J > /root/bak/compute0.json    # Production compute1.json 수행
 weka local resources -C frontend0 -J > /root/bak/frontend0.json
 ls -l /root/bak/
 ```
@@ -40,8 +40,11 @@ weka cluster drive | grep backend07                         # 대상 UUID 확인
 
 # 드라이브별로 deactivate (phasing out) → remove
 weka cluster drive deactivate <UUID>                        # 예: 842fbb22-d23f-4527-9c66-d0be78b3a369
-weka cluster drive remove     <UUID>
 weka cluster drive deactivate <UUID2>                       # 두 번째 데이터 드라이브
+.
+# weka status 로 Rebuilding(phasing out) 되는 상태 확인
+.
+weka cluster drive remove     <UUID>
 weka cluster drive remove     <UUID2>
 
 weka cluster drive | grep backend07                         # target 드라이브가 사라졌는지 확인
