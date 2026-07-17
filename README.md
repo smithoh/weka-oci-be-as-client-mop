@@ -14,19 +14,10 @@ WEKA 백엔드(BE) 노드를 잠시 stateless client로 전환해 파일시스�
 
 ---
 
-## Step 0. 접속
-```bash
-# [로컬 PC]
-ssh -i ~/.oci/id_rsa ubuntu@<backend01_PUBLIC_IP>     # control 세션
-ssh -i ~/.oci/id_rsa ubuntu@<backend07_PUBLIC_IP>     # target 세션
-# 각 세션에서
-sudo -i
-```
-
 ## Step 1. Baseline 확인 + target 드라이브 UUID 파악  [C]
 ```bash
 weka status
-weka cluster drive | grep backend07     # target 드라이브의 DISK ID / UUID 확인 (보통 ACTIVE 2개)
+weka cluster drive | grep backend07     # target 드라이브의 DISK ID / UUID 확인 (Production ACTIVE 10개)
 ```
 기대: `status: OK`, `Fully protected`, `hot spare: 1 ...`. target 드라이브 UUID를 메모(Step 3에서 사용).
 
@@ -103,7 +94,7 @@ weka local ps
 ![Step 5](images/step5.png)
 
 ## Step 6. IO 테스트 (fio)  [T]
-`/mnt/weka/fio`에 fio로 seq/rnd × read/write 4종을 각 60초 수행. (fio 미설치 시 `apt-get install -y fio`)
+`/mnt/weka/fio`에 fio로 seq/rnd × read/write 4종을 각 60초 수행.
 ```bash
 mkdir -p /mnt/weka/fio
 ```
@@ -149,7 +140,7 @@ umount /mnt/weka
 df -h | grep /mnt/weka        # 출력 없어야 함
 weka local ps                 # 헤더만
 ```
-> `umount`이 **`client` 컨테이너를 자동 stop+delete** 합니다("umount successful, stopping and deleting container 'client'"). 별도 `weka local rm client -f`는 불필요(잔여 시에만).
+> `umount`이 **`client` 컨테이너를 자동 stop+delete** 합니다("umount successful, stopping and deleting container 'client'"). 
 
 ![Step 7](images/step7.png)
 
