@@ -33,7 +33,7 @@ ls -l /root/bak/
 
 ![Step 2](images/step2.png)
 
-## Step 3. 클러스터에서 target 드라이브 제거 (deactivate → remove)  [T]
+## Step 3. 클러스터에서 target 드라이브 및 컨테이너 제거 (deactivate → remove)  [T]
 target의 각 드라이브 UUID에 대해 `deactivate` 후 `remove`. (`yes/no` 프롬프트 — 자동화 시 `--force`)
 ```bash
 weka cluster drive | grep backend07                         # 대상 UUID 확인
@@ -48,6 +48,22 @@ weka cluster drive remove     <UUID>
 weka cluster drive remove     <UUID2>
 
 weka cluster drive | grep backend07                         # target 드라이브가 사라졌는지 확인
+
+weka cluster container | grep backend07                     # 대상 Container 확인
+
+weka cluster container deactivate <BE7-drives0-container-id>                    # 예: 8, 13, 21 (drives0, compute0, frontend0) 
+weka cluster container deactivate <BE7-compute0-container-id>
+weka cluster container deactivate <BE7-frontend0-container-id>                                      
+.
+# weka cluster container 로 INACTIVE 상태 확인
+.
+weka cluster container deactivate <BE7-drives0-container-id>                    # 예: 8, 13, 21 (drives0, compute0, frontend0) 
+weka cluster container deactivate <BE7-compute0-container-id>
+weka cluster container deactivate <BE7-frontend0-container-id>       
+
+weka cluster container | grep backend07                         # target 컨테이너 사라졌는지 확인
+
+
 ```
 > - `deactivate` 하면 해당 드라이브 `STATUS=INACTIVE`, `NODE ID=INVALID` → `remove` 로 클러스터에서 완전 제거.
 > - UUID 대신 DISK ID도 가능. 확인 없이 진행하려면 `--force`.
