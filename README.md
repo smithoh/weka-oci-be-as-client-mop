@@ -185,8 +185,7 @@ weka status
 
 ---
 
-## 부록 — 핵심 발견 / 함정
-- **`weka local stop`만으론 client mount 불가**: WEKA는 한 호스트에 backend + stateless client 공존을 금지(`does not support mixing...`). client 포트를 바꿔도 동일(역할 검사, 포트 무관). → **`weka local rm --all -f`** 로 backend 컨테이너를 없애야 client mount 가능.
+## 부록
 - **드라이브 제거는 `deactivate` → `remove` (UUID/ID)**: deactivate로 phase-out(INACTIVE, NODE INVALID) 후 remove. detach 전에 미리 빼두면 재-add 후 stale 드라이브를 따로 정리할 필요가 없음.
 - **드라이브 deactivate 블로커 2종**:
   - backend 수가 스트라이프 폭에 빠듯하면(예: 6 BE에서 3+2) FD 부족으로 **hang**.
