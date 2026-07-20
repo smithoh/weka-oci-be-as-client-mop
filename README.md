@@ -107,48 +107,68 @@ mount -t wekafs \
 ```bash
 grep /mnt/weka /proc/mounts
 weka local ps
+weka status
+weka cluster container
+weka cluster process
 ```
 기대: wekafs 마운트 존재, `client` 컨테이너 `Running`.
 
 ![Step 5](images/step5.png)
 
 ## Step 6. IO 테스트 (fio)  [T]
-`/mnt/weka/fio`에 fio로 seq/rnd × read/write 4종을 각 60초 수행.
+`/mnt/weka/fio`에 fio로 seq/rnd × read/write 4종을 각 120초 수행.
 ```bash
 mkdir -p /mnt/weka/fio
+date
 ```
 
 **seq-r — 순차 읽기 (1Mi, iodepth=1, numjobs=96)**
 ```bash
+sleep 30
+date
 fio --directory=/mnt/weka/fio --filesize=1G --direct=1 --ioengine=posixaio \
-    --time_based=1 --runtime=60 --startdelay=5 --ramp_time=3 \
+    --time_based=1 --runtime=120 --startdelay=5 --ramp_time=3 \
     --fallocate=none --create_serialize=0 --invalidate=1 --exitall_on_error=1 \
     --clocksource=gettimeofday --disk_util=1 --group_reporting=1 --filename_format='$jobnum' \
     --name=seq-r --rw=read --blocksize=1Mi --iodepth=1 --numjobs=96
+sleep 30
+date
 ```
 **seq-w — 순차 쓰기 (1Mi, iodepth=1, numjobs=96)**
 ```bash
+sleep 30
+date
 fio --directory=/mnt/weka/fio --filesize=1G --direct=1 --ioengine=posixaio \
-    --time_based=1 --runtime=60 --startdelay=5 --ramp_time=3 \
+    --time_based=1 --runtime=120 --startdelay=5 --ramp_time=3 \
     --fallocate=none --create_serialize=0 --invalidate=1 --exitall_on_error=1 \
     --clocksource=gettimeofday --disk_util=1 --group_reporting=1 --filename_format='$jobnum' \
     --name=seq-w --rw=write --blocksize=1Mi --iodepth=1 --numjobs=96
+sleep 30
+date
 ```
 **rnd-r — 랜덤 읽기 (4k, iodepth=16, numjobs=256)**
 ```bash
+sleep 30
+date
 fio --directory=/mnt/weka/fio --filesize=1G --direct=1 --ioengine=posixaio \
-    --time_based=1 --runtime=60 --startdelay=5 --ramp_time=3 \
+    --time_based=1 --runtime=120 --startdelay=5 --ramp_time=3 \
     --fallocate=none --create_serialize=0 --invalidate=1 --exitall_on_error=1 \
     --clocksource=gettimeofday --disk_util=1 --group_reporting=1 --filename_format='$jobnum' \
     --name=rnd-r --rw=randread --blocksize=4k --iodepth=16 --numjobs=256
+sleep 30
+date
 ```
 **rnd-w — 랜덤 쓰기 (4k, iodepth=16, numjobs=256)**
 ```bash
+sleep 30
+date
 fio --directory=/mnt/weka/fio --filesize=1G --direct=1 --ioengine=posixaio \
-    --time_based=1 --runtime=60 --startdelay=5 --ramp_time=3 \
+    --time_based=1 --runtime=120 --startdelay=5 --ramp_time=3 \
     --fallocate=none --create_serialize=0 --invalidate=1 --exitall_on_error=1 \
     --clocksource=gettimeofday --disk_util=1 --group_reporting=1 --filename_format='$jobnum' \
     --name=rnd-w --rw=randwrite --blocksize=4k --iodepth=16 --numjobs=256
+sleep 30
+date
 ```
 > 옵션은 저장소의 [`fio.job`](fio.job) 기준. `stonewall`은 단일 실행이라 생략, `filename_format=$jobnum`은 셸 확장 방지로 작은따옴표.
 > 기대: 각 실행 끝에 `READ:`/`WRITE:` bw·IOPS 요약 출력 (seq=대역폭, rnd=IOPS 관점).
